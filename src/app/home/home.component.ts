@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-  // avec un observable
+
      this.propertiesSubscription = this.propertiesService.propertiesSubject.subscribe(
       (data: any) => {
         this.properties = data;
@@ -25,19 +25,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     )
 
     this.propertiesService.emitProperties();
-    // avec une Promise()
-    // this.propertiesService.getProperties().subscribe(
-    //   (data: any) => {
-    //     console.log(data);
-    //     this.properties = data;
-    //   }
-    // ).catch(
-    //   (error) => {
-    //     console.error(error);
-    //   }
-    // )
-    // OU
-    // this.properties = this.propertiesService.properties; suffirait, mais ici on fait une requete asynchrone
   }
 
   getSoldValue(index) {
