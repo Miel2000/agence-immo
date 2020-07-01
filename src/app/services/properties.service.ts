@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Property } from '../interfaces/property';
 import * as firebase from 'firebase';
+import { isFunction } from 'util';
 
 
 @Injectable({
@@ -101,6 +102,21 @@ export class PropertiesService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  removeFile(fileLink: string) {
+    if(fileLink) {
+      const storageRef = firebase.storage().refFromURL(fileLink);
+      storageRef.delete().then(
+        () => {
+          console.log('File Deleted')
+        }
+      ).catch(
+        (error) => {
+          console.error(error)
+        }
+      )
     }
   }
   

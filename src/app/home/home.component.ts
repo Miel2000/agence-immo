@@ -22,8 +22,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       (data: any) => {
         this.properties = data;
       },
-    )
-
+    );
+    this.propertiesService.getProperties();
     this.propertiesService.emitProperties();
   }
 

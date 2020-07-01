@@ -8,33 +8,47 @@
     <hr class="mt-1 mb-5 bg-dark">
     <div class="row">
         <div class="col-12 shadow-sm p4 mb-3 bg-light" *ngFor="let propertie of properties; let i = index">
-            <div class="d-flex">
-                <h3 class="font-weight-light">{{ propertie.title }}</h3>
-                <div class="ml-auto">
-                    <button  (click)="onEditProperty(propertie)" type="button" class="btn btn-primary m-1">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button type="button" class="btn btn-danger m-1" (click)="onDeleteProperty(i)">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
+            <div class="row">
+                <div class="col-3">
+
+                    <div *ngFor="let photo of propertie.photos; let  first = first">
+
+                         <img  *ngIf="first" [src]="photo" alt="photo du bien" class="w-100">
+
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="d-flex">
+                        <h3 class="font-weight-light">{{ propertie.title }}</h3>
+                        <div class="ml-auto">
+                            <button (click)="onEditProperty(propertie)" type="button" class="btn btn-primary m-1">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger m-1" (click)="onDeleteProperty(i)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p>
+                        {{ propertie.category }} <span *ngIf="propertie.surface && propertie.surface !== ''"> de {{ propertie.surface }}
+                            m²,</span> {{ propertie.rooms }}
+                    </p>
+                    <p>
+                        <em *ngIf="propertie.description"> {{ propertie.description }}</em>
+                    </p>
+                    <p>
+                        <span *ngIf="propertie.sold" class="text-success">Vendu</span>
+                        <span *ngIf="!propertie.sold" class="text-danger">A vendre</span>
+                    </p>
+                    <p *ngIf="propertie.price && propertie.price !== ''"> {{ propertie.price }} € </p>
+                    
+                    
+                    </div>
                 </div>
             </div>
-            <p>
-                {{ propertie.category }} <span *ngIf="propertie.surface && propertie.surface !== ''"> de {{ propertie.surface }} m²,</span> {{ propertie.rooms }}
-            </p>
-            <p>
-                <em *ngIf="propertie.description" > {{ propertie.description }}</em>
-            </p>
-            <p>
-                <span *ngIf="propertie.sold" class="text-success">Vendu</span>
-                <span *ngIf="!propertie.sold" class="text-danger">A vendre</span>
-            </p>
-            <p *ngIf="propertie.price && propertie.price !== ''" > {{ propertie.price }} € </p>
-        
-
-        </div>
+          
       
-    </div>
+        </div>
 </div>
 
 <!-- Modal -->
@@ -78,9 +92,16 @@
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Prix" formControlName="price" >
                     </div>
-                    <div *ngIf="photoUrl && photoUrl !== ''" class="d-flex">
-                        <img [src]="photoUrl" alt="" class="w-50 mx-auto">
-                       
+                    
+                    <div class="row">
+                        <div *ngFor="let photo of photosAdded; let i = index" class="col-4 border border-secondary rounded m-1 p-1 bg-light position-relative">
+                            <span class="text-danger position-absolute mr-1 deletePhoto" (click)="onRemoveAddedPhoto(i)">
+                                <i class="fas fa-times">
+
+                                </i>
+                            </span>
+                            <img [src]="photo" class="w-100" alt="">
+                        </div>
                     </div>
                     <br>
                     <div class="form-row">
@@ -88,7 +109,7 @@
                             <div class="input-group mb-3">
                             
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01"
+                                    <input type="file" class="custom-file-input"
                                         (change)="onUploadFile($event)">
                                     <label class="custom-file-label" for="inputGroupFile01">Envoyer une image</label>
                                 </div>

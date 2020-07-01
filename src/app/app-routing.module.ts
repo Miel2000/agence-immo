@@ -7,8 +7,10 @@ import { LoginComponent } from './authentification/login/login.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent},
-  { path: 'login', component: LoginComponent}
-
+  { path: 'login', component: LoginComponent},
+  { path: '', redirectTo: 'home', pathMatch:'full'},
+  { path: '**', component: LoginComponent},
+  
 ];
 
 @NgModule({

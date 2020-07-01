@@ -31,7 +31,7 @@ export class AdminPropertiesComponent implements OnInit {
 
   photoUploading = false;
   photoUploaded = false;
-  photoUrl: string;
+  photosAdded: any[];
 
 
   
@@ -65,13 +65,14 @@ export class AdminPropertiesComponent implements OnInit {
     const newProperty: Property =  this.propertiesForm.value;
    
     newProperty.sold = this.propertiesForm.get('sold').value ? this.propertiesForm.get('sold').value : false;
-    newProperty.photo = this.photoUrl ? this.photoUrl : '';
+    newProperty.photos = this.photosAdded ? this.photosAdded : [];
     
     if(this.editMode) {
        this.propertiesService.updateProperty(newProperty, this.indexToUpdate);
     } else {
 
         this.propertiesService.createProperty(newProperty);
+      
     }
 
     // on vient hide le modal grâce à l'importation de jquery
@@ -86,6 +87,17 @@ export class AdminPropertiesComponent implements OnInit {
   }
 
   onConfirmeDeleteProperty() {
+    // if (this.properties[this.indexToRemove].photo && this.properties[this.indexToRemove].photo !== ''){
+
+    //   this.propertiesService.removeFile(this.properties[this.indexToRemove].photo)
+    // }
+
+
+    this.properties[this.indexToRemove].photos.forEach(
+      (photo) => {
+        this.propertiesService.removeFile(photo);
+      }
+    )
     this.propertiesService.deleteProperty(this.indexToRemove);
     console.log('yeeet');
     $('#deletePropertyModal').modal('hide');
@@ -101,9 +113,10 @@ export class AdminPropertiesComponent implements OnInit {
     this.propertiesForm.get('category').setValue(property.category);
     this.propertiesForm.get('surface').setValue(property.surface);
     this.propertiesForm.get('rooms').setValue(property.rooms);
-    this.propertiesForm.get('description').setValue(property.description);
+    this.propertiesForm.get('description').setValue(property.description ? property.description : '' );
     this.propertiesForm.get('price').setValue(property.price);
     this.propertiesForm.get('sold').setValue(property.sold);
+    this.photosAdded = property.photos ? property.photos : []; 
 
 
     // trouve l'index
@@ -118,14 +131,22 @@ export class AdminPropertiesComponent implements OnInit {
       this.indexToUpdate = index;
   }
 
+  onRemoveAddedPhoto(index) {
+    this.propertiesService.removeFile(this.onRemoveAddedPhoto[index]);
+    this.photosAdded.splice(index, 1);
+  }
+
 
   onUploadFile(event) {
     this.photoUploading = true;
-
+  
     this.propertiesService.uploadFile(event.target.files[0]).then(
       (url: string) => {
-        this.photoUrl = url; 
-        console.log(this.photoUrl);
+       
+
+        this.photosAdded.push(url); 
+
+    
         this.photoUploading = false;
         this.photoUploaded = true;
         setTimeout(() => {
@@ -139,6 +160,7 @@ export class AdminPropertiesComponent implements OnInit {
   resetForm() {
     this.editMode = false; 
     this.propertiesForm.reset();
+    this.photosAdded = [];
   }
 
 
